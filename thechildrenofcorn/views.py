@@ -1,3 +1,5 @@
+import requests
+import json
 
 
 from django.shortcuts import render, HttpResponse
@@ -8,6 +10,12 @@ from .forms import UserForm
 from django.templatetags.static import static
 
 import subprocess
+
+from steam import Steam
+from decouple import config
+
+
+url = ("https://api.steampowered.com/ISteamNews/GetNewsForApp/v0002/?appid=2071920&count=3&maxlength=300&format=json")
 
 
 
@@ -22,16 +30,34 @@ passwordar = [char for char in password]
 file = static("code.txt")
 
 
-
+req = {
+    "Key": "68F1DF313D6C8D7CAF07D4F6717A20A3",
+    "appid": "2071920",
+    "listingid": "5430731906064702783"
+    }
 
 
 
 def start(request) :
    
-    
+   ##r = requests.get(url, params=req)
    
+   ##print(r.text)
+   
+   requestpost = requests.get(url, params=req)
+   response_data = requestpost.json()
+   
+   group = response_data["appnews"]
+   group2 = group["newsitems"]
+   
+   
+   
+   for appnew in group2:
+    
+     print (appnew["title"])
+     print (appnew["contents"])
 
-    return render(request, "Homepage.html")
+   return render(request, "Homepage.html")
     
 
 def userfield(request):
