@@ -47,17 +47,26 @@ def start(request) :
    requestpost = requests.get(url, params=req)
    response_data = requestpost.json()
    
+   print(type(response_data))
+   
    group = response_data["appnews"]
    group2 = group["newsitems"]
    
+   addeddivst = {}
+   addeddivss = {}
    
-   
-   for appnew in group2:
-    
-     print (appnew["title"])
-     print (appnew["contents"])
+   for appnew in group2:  
 
-   return render(request, "Homepage.html")
+     # this is good for arrays for future refrence
+     #addeddivst.append(appnew["title"])
+     #addeddivss.append(appnew["contents"])
+     
+     addeddivss.update({(appnew["title"]) : (appnew["contents"])})
+     
+     
+   print (addeddivss)
+
+   return render(request, "Homepage.html", {'addeddivss' : addeddivss})
     
 
 def userfield(request):
