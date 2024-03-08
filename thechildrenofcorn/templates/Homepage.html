@@ -11,20 +11,15 @@
 
 
 <div style = "width:50%; margin:0 auto" >
-<!--<form action = "" method="post">
-<label for= "fname">name</label><br>
-<input type="text" id="fname" ><br>
-<label for= "password">password</label><br>
-<input type="text" id="password" name = "nameit" ><br>
-<input type="submit" value="go">
 
-</form>
--->
-<form method ='POST'>{% csrf_token %}
-{{formal.as_p}}
-<input type = 'submit' value = 'bye'/>
+{% for key,value in addeddivss.items %}
+<h2 style = "color : white">{{key}}</h2>
+<p style = "color : white">{{value}}</p>
 
-</form>
+{% endfor %}
+
+
+
 </div>
 
 </body>
