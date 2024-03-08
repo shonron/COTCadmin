@@ -31,7 +31,7 @@ file = static("code.txt")
 
 
 req = {
-    "Key": "68F1DF313D6C8D7CAF07D4F6717A20A3",
+    "Key": "",
     "appid": "2071920",
     "listingid": "5430731906064702783"
     }
