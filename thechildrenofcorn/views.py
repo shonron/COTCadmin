@@ -1,14 +1,16 @@
 import requests
 import json
 
+from django.template import loader
+from django.shortcuts import render, HttpResponse, redirect
 
-from django.shortcuts import render, HttpResponse
+from .models import productname, user , adminaccount, adminaccounts
 
-from .models import productname, user 
-
-from .forms import UserForm
+from .forms import UserForm, Usersignin
 from django.templatetags.static import static
 
+from django.contrib.auth import authenticate
+from django.contrib.auth.models import User
 import subprocess
 
 from steam import Steam
@@ -22,7 +24,8 @@ url = ("https://api.steampowered.com/ISteamNews/GetNewsForApp/v0002/?appid=20719
 # Create your views here.
 
 result = ['hey','hi','ho']
-username = 'BlAnk'
+emailst = 'blank'
+username = 'blank'
 #checkresult = result.split()
 password = "studytonight"
 word = 'nothing'
@@ -30,8 +33,9 @@ passwordar = [char for char in password]
 file = static("code.txt")
 
 
+
 req = {
-    "Key": "",
+    "Key": "68F1DF313D6C8D7CAF07D4F6717A20A3",
     "appid": "2071920",
     "listingid": "5430731906064702783"
     }
@@ -44,10 +48,12 @@ def start(request) :
    
    ##print(r.text)
    
+   print (username)
+   
    requestpost = requests.get(url, params=req)
    response_data = requestpost.json()
    
-   print(type(response_data))
+  
    
    group = response_data["appnews"]
    group2 = group["newsitems"]
@@ -55,23 +61,26 @@ def start(request) :
    addeddivst = {}
    addeddivss = {}
    
-   for appnew in group2:  
+   for appnew in group2:
+     addeddivss.update({(appnew["title"]) : (appnew["contents"])})
 
      # this is good for arrays for future refrence
      #addeddivst.append(appnew["title"])
      #addeddivss.append(appnew["contents"])
      
-     addeddivss.update({(appnew["title"]) : (appnew["contents"])})
      
+   
+       # return redirect ('/signin')
+       # print(authenticated)
      
-   print (addeddivss)
+    
 
    return render(request, "Homepage.html", {'addeddivss' : addeddivss})
     
 
 def userfield(request):
     formal = UserForm()
-    if request.method == "GET" :
+    #if request.method == "GET" :
     
         
     
@@ -82,29 +91,72 @@ def userfield(request):
         #socks = ''.join(sandal)
        # for char in username :
             #if char.isupper() :
-        print(socks)
+       
         #print(list(reversed(result)))
         #for x in result :
         #    if x == 2 :
                 #print(x)
         
-    
+     
     
     if request.method == "POST" : 
         formal = UserForm(request.POST or None)
-        if formal.is_valid():
-            formal.save()
+       
+        if formal.is_valid():       
+            User.email = formal.cleaned_data['email']
+            User.password = formal.cleaned_data['password']
+            User.first_name = formal.cleaned_data['firstname']
+            User.last_name = formal.cleaned_data['lastname']
+            User.username = formal.cleaned_data['username']
+                      
+            print(User.password)
+            
+            user = User.objects.create_user(email=formal.cleaned_data['email'],username =formal.cleaned_data['username'],password=formal.cleaned_data['password'],
+                                             first_name=formal.cleaned_data['firstname'], last_name=formal.cleaned_data['lastname']   )
+            
             formal = UserForm()
+            
     
 
         
         #word = request.POST.get('name')    
         #print(word)
     context = {'formal' : formal}
+    return render(request, "signup.html",context)
+    
+    
+def check(request) :
+
+    formal = Usersignin()
+    
+    if request.method == "POST" : 
+        formal = Usersignin(request.POST or None)
+        
+        if formal.is_valid():
+            data = formal.cleaned_data
+            username = data['username']
+            password = data['password']
+            #mydata = adminaccount.objects.filter(username = 'g').values()
+            check_if_user_exists = User.objects.filter(username=username).exists()         
+           
+            if check_if_user_exists:      
+                user = authenticate(request, username=username, password=password)
+                        
+                if user is not None:
+                    print('success')
+                    
+                    request.session.set_expiry(500)
+                    return redirect ('/')
+            else:
+                print('username')
+    
+   
+    context = {'formal' : formal}
+
     return render(request, "signin.html",context)
     
     
-def check() :
-    print()
-
+def checkcredentials() :
+    email
+    mydata = adminaccount.objects.filter(email = emailst).values()
     
