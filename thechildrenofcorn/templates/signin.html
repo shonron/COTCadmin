@@ -1,15 +1,65 @@
+{% load static %}
+
 <html>
 <head> 
 
 </head>
 
-<body>
+<body style = "background-image : url({% static 'media\woodlawn.png' %}); background-repeat : no-repeat; background-size: 100%;">
 
-<form method = 'POST'>{% csrf_token %}
-{{formal.as_ul}}
-<input type = 'submit' value = 'save'/>
-</form>
+<style>
+.div1{
+	
+	margin-top : 10px;
+	
+	min-height: 10vh;	
+	margin-bottom : 10px;
+	width: 30%;
+	
+	
+}
 
+.bgmood{
+	
+	width: 100%;		
+	margin-left : 30%;	
+	margin-top : 10%;
+	
+}
+
+.bgtext{
+	
+	color: white;
+	margin-left : 20%;
+	margin-right : 20%;
+	
+}
+
+.im1 {
+	margin-top : 5%;
+	margin-bottom : 5%;
+	
+	height: 40%;
+	width: 60%;
+	margin-left : 20%;
+	
+	
+}
+
+</style>
+
+<div class = "bgmood">
+	<div class = "div1">
+
+	<form method = 'POST' class ="bgtext">{% csrf_token %}
+	<img src= "{% static 'media\cotc.png' %}" class = "im1">
+	{{formal.as_ul}}
+	<input type = 'submit' value = 'sign in'/>
+	</form>
+
+
+</div>
+</div>
 <!--<form action ='.' method = 'POST'>{% csrf_token %}
 
 <input type = 'text' name = 'name'/>

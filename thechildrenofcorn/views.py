@@ -43,26 +43,27 @@ req = {
 
 
 def start(request) :
+  
+   if request.user.is_authenticated:
+      ##r = requests.get(url, params=req)
    
-   ##r = requests.get(url, params=req)
+      ##print(r.text)
    
-   ##print(r.text)
+     print (username)
    
-   print (username)
-   
-   requestpost = requests.get(url, params=req)
-   response_data = requestpost.json()
+     requestpost = requests.get(url, params=req)
+     response_data = requestpost.json()
    
   
    
-   group = response_data["appnews"]
-   group2 = group["newsitems"]
+     group = response_data["appnews"]
+     group2 = group["newsitems"]
    
-   addeddivst = {}
-   addeddivss = {}
+     addeddivst = {}
+     addeddivss = {}
    
-   for appnew in group2:
-     addeddivss.update({(appnew["title"]) : (appnew["contents"])})
+     for appnew in group2:
+       addeddivss.update({(appnew["title"]) : (appnew["contents"])})
 
      # this is good for arrays for future refrence
      #addeddivst.append(appnew["title"])
@@ -75,16 +76,18 @@ def start(request) :
      
     
 
-   return render(request, "Homepage.html", {'addeddivss' : addeddivss})
-    
+     return render(request, "Homepage.html", {'addeddivss' : addeddivss})
+   else:
+    formal = UserForm()   
+    context = {'formal' : formal}   
+    return redirect ('/signin/')
 
 def userfield(request):
-    formal = UserForm()
-    #if request.method == "GET" :
-    
-        
+     formal = UserForm()
     
     
+    
+    #if request.method == "GET" :    
         #x = result[2]
         #upperword = [char for char in username if char.isupper()]
         #sandal = list(reversed(upperword))
@@ -99,7 +102,7 @@ def userfield(request):
         
      
     
-    if request.method == "POST" : 
+     if request.method == "POST" : 
         formal = UserForm(request.POST or None)
        
         if formal.is_valid():       
@@ -121,8 +124,10 @@ def userfield(request):
         
         #word = request.POST.get('name')    
         #print(word)
-    context = {'formal' : formal}
-    return render(request, "signup.html",context)
+     context = {'formal' : formal}
+     
+     
+     return render(request, "signup.html",context)
     
     
 def check(request) :
